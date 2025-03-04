@@ -1,4 +1,5 @@
-# SSTrack-AAAI2025
-The official implementation for the paper AAAI2025 [Decoupled Spatio-Temporal Consistency Learning for Self-Supervised Tracking].
+# [AAAI'2025] - SSTrack
 
-https://drive.google.com/drive/folders/1JU2H54lWDi1D2vmOZt7BPbTQn7PiWIOn?usp=sharing
+The official implementation for the **AAAI 2025** paper \[[_Decoupled Spatio-Temporal Consistency Learning for Self-Supervised Tracking_](https://arxiv.org)\].
+
+[[Models](https://drive.google.com/drive/folders/1JU2H54lWDi1D2vmOZt7BPbTQn7PiWIOn?usp=sharing)], [[Raw Results](https://drive.google.com/drive/folders/1JU2H54lWDi1D2vmOZt7BPbTQn7PiWIOn?usp=sharing)]]
