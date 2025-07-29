@@ -75,7 +75,7 @@ lib/test/evaluation/local.py  # paths about testing
 
 
 ## Training
-Download pre-trained [DropMAE ViT-Base weights]([https://github.com/jimmy-dq/DropMAE](https://drive.google.com/file/d/1qMuBJtNIQQ-NCz98Pig72YVKQdasc49h/view?usp=share_link)) and put it under `$PROJECT_ROOT$/pretrained_networks`.
+Download pre-trained [DropMAE ViT-Base weights](https://drive.google.com/file/d/1qMuBJtNIQQ-NCz98Pig72YVKQdasc49h/view?usp=share_link)] and put it under `$PROJECT_ROOT$/pretrained_networks`.
 
 ```
 python tracking/train.py \
