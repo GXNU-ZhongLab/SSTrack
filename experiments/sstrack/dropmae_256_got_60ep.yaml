@@ -1,0 +1,90 @@
+DATA:
+  MAX_SAMPLE_INTERVAL: 400
+  MEAN:
+  - 0.485
+  - 0.456
+  - 0.406
+  STD:
+  - 0.229
+  - 0.224
+  - 0.225
+  SEARCH:
+    CENTER_JITTER: 0  # 4.5
+    FACTOR: 4.0       # no use
+    SCALE_JITTER: 0   # 0.5
+    SIZE: 256
+    NUMBER: 3
+  GROUNDING:
+    CENTER_JITTER: 3
+    FACTOR: 4.0
+    SCALE_JITTER: 0.5
+    SIZE: 256
+    NUMBER: 2
+  TEMPLATE:
+    CENTER_JITTER: 0
+    FACTOR: 2.0
+    SCALE_JITTER: 0
+    SIZE: 128
+    NUMBER: 1
+
+  TRAIN:
+    DATASETS_NAME:
+    - GOT10K_train_full
+    DATASETS_RATIO:
+    - 1
+    SAMPLE_PER_EPOCH: 10000
+  VAL:
+    DATASETS_NAME:
+    - GOT10K_votval
+    DATASETS_RATIO:
+    - 1
+    SAMPLE_PER_EPOCH: 2000
+MODEL:
+  PRETRAIN_FILE: "mae_pretrain_vit_base.pth"  # "dropmae_k700_800E.pth"  # 
+  EXTRA_MERGER: False
+  RETURN_INTER: False
+
+  BACKBONE:
+    TYPE: vit_base_dropmae_ce
+    STRIDE: 16
+    CE_LOC: [3, 6, 9]
+    CE_KEEP_RATIO: [0.7, 0.7, 0.7]
+    CE_TEMPLATE_RANGE: 'CTR_POINT'  # choose between ALL, CTR_POINT, CTR_REC, GT_BOX
+    TEMPLATE_BOX_MASK: 'GT_BOX'  # choose between ALL, CTR_POINT, CTR_REC, GT_BOX
+    ADD_CLS_TOKEN: True            # use track_query mechanism
+    ATTN_TYPE: concat  # Choose from [concat, separate]
+
+  HEAD:
+    TYPE: CENTER
+    NUM_CHANNELS: 256
+
+TRAIN:
+  CONTRASTIVE_LOSS: True
+  BACKBONE_MULTIPLIER: 0.1
+  DROP_PATH_RATE: 0.1
+  CE_START_EPOCH: 20  # candidate elimination start epoch
+  CE_WARM_EPOCH: 40  # candidate elimination warm up epoch
+  BATCH_SIZE: 2
+  NUM_WORKER: 1
+  EPOCH: 60
+  LR_DROP_EPOCH: 40
+  GIOU_WEIGHT: 2.0
+  L1_WEIGHT: 5.0
+  GRAD_CLIP_NORM: 0.1
+  LR: 0.00025
+  OPTIMIZER: ADAMW
+  PRINT_INTERVAL: 1
+  SCHEDULER:
+    TYPE: step
+    DECAY_RATE: 0.1
+  VAL_EPOCH_INTERVAL: 10
+  WEIGHT_DECAY: 0.0001
+  AMP: False
+TEST:
+  EPOCH: 60
+  SEARCH_FACTOR: 4.0
+  SEARCH_SIZE: 256
+  TEMPLATE_FACTOR: 2.0
+  TEMPLATE_SIZE: 128
+  TEMPLATE_NUMBER: 4
+  MEMORY_THRESHOLD: 1000
