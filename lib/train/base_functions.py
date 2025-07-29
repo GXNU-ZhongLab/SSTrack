@@ -7,10 +7,6 @@ from lib.train.dataset import Lasot_lmdb, Got10k_lmdb, MSCOCOSeq_lmdb, ImagenetV
 from lib.train.data import sampler, opencv_loader, processing, LTRLoader
 import lib.train.data.transforms as tfm
 from lib.utils.misc import is_main_process
-from lib.train.dataset import Davis, YouTubeVOS, Got10kVOS, LasotVOS
-from lib.train.dataset import Refer_YouTubeVOS, TNL2k, TNL2k_Lang, Lasot_Lang, OTB_Lang, RefCOCOSeq
-from lib.train.dataset import VisEvent, LasHeR, DepthTrack, ARKit
-
 
 def update_settings(settings, cfg):
     settings.print_interval = cfg.TRAIN.PRINT_INTERVAL
