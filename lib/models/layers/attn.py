@@ -33,8 +33,7 @@ class Attention(nn.Module):
                                                                           relative_position_index.max() + 1)))
             trunc_normal_(self.relative_position_bias_table, std=0.02)
 
-    def forward(self, x, mask=None, return_attention=False, 
-                boxmask_vec=None, lens_t=None):
+    def forward(self, x, mask=None, return_attention=False, lens_t=None):
         # x: B, N, C
         # mask: [B, N, ] torch.bool
         B, N, C = x.shape
@@ -49,36 +48,6 @@ class Attention(nn.Module):
 
         if mask is not None:
             attn = attn.masked_fill(mask.unsqueeze(1).unsqueeze(2), float('-inf'),)
-
-        if not boxmask_vec is None:
-            # Version 2
-            _, N_box, _ = boxmask_vec.shape
-            boxmask_vec = boxmask_vec.reshape(B, N_box, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
-            
-            t_mask = torch.zeros_like(attn, device='cuda')
-            t_mask[:, :, :lens_t, :lens_t] = 1
-            expanded_t_boxmask = torch.zeros_like(v)
-            expanded_t_boxmask[:, :, :lens_t, :] = boxmask_vec
-            t_attn = (attn * t_mask).softmax(dim=-1)
-            out_t_boxmask = t_attn @ expanded_t_boxmask
-            
-            t_boxmask_vec = out_t_boxmask[:, :, :lens_t, :]
-            t_boxmask_vec = t_boxmask_vec.permute(0, 2, 1, 3).reshape(B, N_box, C)
-            out_t_boxmask = self.box_embed(t_boxmask_vec)
-            out_t_boxmask = out_t_boxmask.transpose(1, 2)
-            
-            ts_mask = torch.zeros_like(attn, device='cuda')
-            ts_mask[:, :, :lens_t, lens_t:] = 1
-            expanded_ts_boxmask_vec = torch.zeros_like(attn)
-            expanded_ts_boxmask_vec[:, :, :lens_t, lens_t:] = out_t_boxmask.unsqueeze(-1).repeat(1, 1, 1, N-lens_t)
-            attn = attn * (1 - ts_mask) + attn * ts_mask * expanded_ts_boxmask_vec
-
-            # Version 1
-            # mask = torch.zeros_like(attn, device='cuda')
-            # mask[:, :, :lens_t, lens_t:] = 1
-            # expanded_boxmask_vec = torch.zeros_like(attn)
-            # expanded_boxmask_vec[:, :, :lens_t, lens_t:] = boxmask_vec.unsqueeze(-1).repeat(1, 1, 1, N-lens_t)
-            # attn = attn * (1 - mask) + attn * mask * expanded_boxmask_vec
 
         attn = attn.softmax(dim=-1)
         attn = self.attn_drop(attn)
@@ -152,4 +121,5 @@ class Attention_talking_head(nn.Module):
         x = (attn @ v).transpose(1, 2).reshape(B, N, C)
         x = self.proj(x)
         x = self.proj_drop(x)
+
         return x
