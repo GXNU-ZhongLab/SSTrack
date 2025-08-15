@@ -65,7 +65,7 @@ MODEL:
     NUM_CHANNELS: 256
 
 TRAIN:
-  CONTRASTIVE_LOSS: True
+  CONTRASTIVE_LOSS: False  # True
   BACKBONE_MULTIPLIER: 0.1
   DROP_PATH_RATE: 0.1
   CE_START_EPOCH: 20  # candidate elimination start epoch
