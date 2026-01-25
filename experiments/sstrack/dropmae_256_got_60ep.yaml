@@ -40,7 +40,7 @@ DATA:
     - 1
     SAMPLE_PER_EPOCH: 2000
 MODEL:
-  PRETRAIN_FILE: "mae_pretrain_vit_base.pth"  # "dropmae_k700_800E.pth"  # 
+  PRETRAIN_FILE: "dropmae_k700_800E.pth"  # "mae_pretrain_vit_base.pth"  # 
   EXTRA_MERGER: False
   RETURN_INTER: False
 
