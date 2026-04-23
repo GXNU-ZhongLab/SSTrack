@@ -96,8 +96,7 @@ class CEBlock(nn.Module):
                 add_cls_token=False, query_len=1, boxmask_vec=None):
         lens_t = global_index_template.shape[1]
         
-        x_attn, attn = self.attn(self.norm1(x), mask, True, 
-                                 boxmask_vec=boxmask_vec, lens_t=lens_t)
+        x_attn, attn = self.attn(self.norm1(x), mask, True, lens_t=lens_t)
         x = x + self.drop_path(x_attn)
 
         removed_index_search = None
